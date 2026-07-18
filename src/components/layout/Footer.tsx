@@ -61,7 +61,7 @@ export function Footer() {
           </div>
 
           {/* Link columns */}
-          <div className="flex flex-wrap gap-x-10 gap-y-8">
+          <div className="flex flex-wrap gap-x-32 gap-y-8">
             {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{title}</h3>
