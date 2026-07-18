@@ -36,14 +36,14 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="border-t border-gray-200 bg-gray-50 py-20 dark:border-dark-700 dark:bg-dark-900/50 lg:py-28">
+    <section id="faq" className="border-t border-gray-200 bg-gray-50 py-14 dark:border-dark-700 dark:bg-dark-900/50 lg:py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-16 text-center"
+          className="mb-10 text-center"
         >
           <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
             Frequently Asked <span className="gradient-text">Questions</span>

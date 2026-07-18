@@ -57,7 +57,7 @@ export function StatsSection() {
   ];
 
   return (
-    <section className="border-y border-gray-200 bg-gray-50 py-16 dark:border-dark-700 dark:bg-dark-900/50">
+    <section className="border-y border-gray-200 bg-gray-50 py-12 dark:border-dark-700 dark:bg-dark-900/50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={containerVariants}

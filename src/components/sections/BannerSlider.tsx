@@ -90,7 +90,7 @@ export function BannerSlider() {
   };
 
   return (
-    <section className="relative overflow-hidden  ">
+    <section className="relative overflow-hidden py-30">
       {/* Background gradient */}
       <div
         className={`absolute inset-0 bg-gradient-to-b ${slide.gradient} transition-all duration-700`}
