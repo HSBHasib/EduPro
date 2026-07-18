@@ -20,7 +20,7 @@ interface AnalysisResult {
 }
 
 async function extractTextFromPDF(file: File): Promise<string> {
-  const pdfjsLib = await import("pdfjs-dist/build/pdf");
+  const pdfjsLib = await import("pdfjs-dist");
 
   pdfjsLib.GlobalWorkerOptions.workerSrc = "";
   pdfjsLib.GlobalWorkerOptions.workerPort = null;
