@@ -64,19 +64,8 @@ function formatInline(text: string): string {
 
 export function ChatAssistant() {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
-  const [currentSession, setCurrentSession] = useState<string | null>(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("edupro-chat-session");
-    }
-    return null;
-  });
-  const [messages, setMessages] = useState<ChatMessage[]>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("edupro-chat-messages");
-      return saved ? JSON.parse(saved) : [];
-    }
-    return [];
-  });
+  const [currentSession, setCurrentSession] = useState<string | null>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
@@ -96,18 +85,6 @@ export function ChatAssistant() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
-  useEffect(() => {
-    if (messages.length > 0) {
-      localStorage.setItem("edupro-chat-messages", JSON.stringify(messages));
-    }
-  }, [messages]);
-
-  useEffect(() => {
-    if (currentSession) {
-      localStorage.setItem("edupro-chat-session", currentSession);
-    }
-  }, [currentSession]);
 
   async function loadSessions() {
     try {
@@ -129,8 +106,6 @@ export function ChatAssistant() {
     setCurrentSession(null);
     setMessages([]);
     setInput("");
-    localStorage.removeItem("edupro-chat-session");
-    localStorage.removeItem("edupro-chat-messages");
   }
 
   async function sendMessage(message: string) {

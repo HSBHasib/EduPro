@@ -26,8 +26,8 @@ export function UnauthorizedContent() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-red-400/20 to-red-500/10">
-            <Lock className="h-12 w-12 text-red-400" />
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-red-400/20 to-red-500/10">
+            <Lock className="h-10 w-10 text-red-400" />
           </div>
         </motion.div>
 

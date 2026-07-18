@@ -39,13 +39,7 @@ async function extractTextFromPDF(file: File): Promise<string> {
 
 export function DocumentIntelligence() {
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<AnalysisResult | null>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("edupro-doc-result");
-      return saved ? JSON.parse(saved) : null;
-    }
-    return null;
-  });
+  const [result, setResult] = useState<AnalysisResult | null>(null);
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
   const [extracting, setExtracting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -103,7 +97,6 @@ export function DocumentIntelligence() {
     try {
       const res = await api.documents.analyze(data.content, data.fileName);
       setResult(res.data);
-      localStorage.setItem("edupro-doc-result", JSON.stringify(res.data));
       toast.success("Document analyzed successfully!");
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to analyze document";
