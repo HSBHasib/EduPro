@@ -125,6 +125,7 @@ export const api = {
       search?: string;
       category?: string;
       priority?: string;
+      sort?: string;
       page?: number;
       limit?: number;
     }) => {
@@ -132,6 +133,7 @@ export const api = {
       if (params?.search) query.set("search", params.search);
       if (params?.category) query.set("category", params.category);
       if (params?.priority) query.set("priority", params.priority);
+      if (params?.sort) query.set("sort", params.sort);
       if (params?.page) query.set("page", String(params.page));
       if (params?.limit) query.set("limit", String(params.limit));
       return fetchAPI<LearningItem[]>(`/api/items?${query.toString()}`);

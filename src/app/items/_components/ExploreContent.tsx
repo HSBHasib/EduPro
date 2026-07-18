@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal, ArrowUpDown } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { ItemCard } from "@/components/ui/ItemCard";
@@ -26,6 +26,14 @@ const priorityOptions = [
   { value: "low", label: "Low" },
 ];
 
+const sortOptions = [
+  { value: "newest", label: "Newest First" },
+  { value: "oldest", label: "Oldest First" },
+  { value: "most_viewed", label: "Most Viewed" },
+  { value: "title_asc", label: "Title A-Z" },
+  { value: "title_desc", label: "Title Z-A" },
+];
+
 function buildURL(base: string, params: Record<string, string>) {
   const url = new URL(base);
   Object.entries(params).forEach(([key, val]) => {
@@ -47,6 +55,7 @@ export function ExploreContent() {
   const search = searchParams.get("search") || "";
   const category = searchParams.get("category") || "";
   const priority = searchParams.get("priority") || "";
+  const sort = searchParams.get("sort") || "newest";
   const page = parseInt(searchParams.get("page") || "1", 10);
 
   const [searchInput, setSearchInput] = useState(search);
@@ -55,13 +64,14 @@ export function ExploreContent() {
     setSearchInput(search);
   }, [search]);
 
-  const loadItems = useCallback(async (s: string, c: string, p: string, pg: number) => {
+  const loadItems = useCallback(async (s: string, c: string, p: string, so: string, pg: number) => {
     setLoading(true);
     try {
       const res = await api.items.list({
         search: s || undefined,
         category: c || undefined,
         priority: p || undefined,
+        sort: so || undefined,
         page: pg,
         limit: 12,
       });
@@ -75,8 +85,8 @@ export function ExploreContent() {
   }, []);
 
   useEffect(() => {
-    loadItems(search, category, priority, page);
-  }, [search, category, priority, page, loadItems]);
+    loadItems(search, category, priority, sort, page);
+  }, [search, category, priority, sort, page, loadItems]);
 
   function updateParams(updates: Record<string, string>) {
     const base = window.location.origin + "/items";
@@ -104,6 +114,10 @@ export function ExploreContent() {
 
   function handlePriorityChange(val: string) {
     updateParams({ priority: val });
+  }
+
+  function handleSortChange(val: string) {
+    updateParams({ sort: val });
   }
 
   function handlePageChange(newPage: number) {
@@ -140,6 +154,14 @@ export function ExploreContent() {
                 />
               </div>
             </form>
+            <div className="flex items-center gap-2">
+              <ArrowUpDown className="h-4 w-4 text-gray-400" />
+              <Select
+                value={sort}
+                onChange={(e) => handleSortChange(e.target.value)}
+                options={sortOptions}
+              />
+            </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-dark-600 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700"

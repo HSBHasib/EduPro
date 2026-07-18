@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Loader2, BookOpen } from "lucide-react";
+import { Eye, EyeOff, Loader2, BookOpen, Zap } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
 import { loginSchema, type LoginInput } from "@/lib/validations";
@@ -31,9 +31,15 @@ export function LoginContent() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginInput>({
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
   });
+
+  function fillDemoCredentials() {
+    setValue("email", "siddik12@gmail.com", { shouldValidate: true });
+    setValue("password", "password123", { shouldValidate: true });
+    toast.success("Demo credentials filled! Click Sign In.");
+  }
 
   async function onSubmit(data: LoginInput) {
     setLoading(true);
@@ -89,7 +95,14 @@ export function LoginContent() {
               </Button>
             </form>
 
-            <div className="relative my-6">
+            <div className="my-4">
+              <Button variant="ghost" onClick={fillDemoCredentials} className="w-full gap-2 text-brand-400 hover:text-brand-500 hover:bg-brand-300/10">
+                <Zap className="h-4 w-4" />
+                Fill Demo Credentials
+              </Button>
+            </div>
+
+            <div className="relative my-4">
               <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200 dark:border-dark-600" /></div>
               <div className="relative flex justify-center text-sm"><span className="bg-white px-3 text-gray-400 dark:bg-dark-800 dark:text-gray-500">or continue with</span></div>
             </div>
