@@ -175,14 +175,23 @@ export function DocumentIntelligence() {
       doc.text("Action Items", margin, y);
       y += 8;
 
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      doc.setTextColor(60);
-      result.actionItems.forEach((item) => {
+      result.actionItems.forEach((item, idx) => {
         if (y > 280) { doc.addPage(); y = margin; }
-        const lines = doc.splitTextToSize(`▸  ${item}`, maxWidth);
-        doc.text(lines, margin, y);
-        y += lines.length * 5 + 3;
+
+        doc.setFillColor(255, 245, 238);
+        doc.roundedRect(margin, y - 4, maxWidth, 10, 2, 2, "F");
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.setTextColor(255, 122, 86);
+        doc.text(`${idx + 1}.`, margin + 3, y + 3);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.setTextColor(60);
+        const lines = doc.splitTextToSize(item, maxWidth - 14);
+        doc.text(lines, margin + 12, y + 3);
+        y += Math.max(lines.length * 5, 10) + 4;
       });
     }
 

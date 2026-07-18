@@ -7,6 +7,61 @@ import { Button } from "@/components/ui/Button";
 import { api, ChatSession, ChatMessage } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
+function formatReply(text: string) {
+  const blocks = text.split(/(```[\s\S]*?```)/g);
+  return blocks.map((block, bi) => {
+    if (block.startsWith("```") && block.endsWith("```")) {
+      const code = block.slice(3, -3).replace(/^\w*\n/, "");
+      return (
+        <pre key={bi} className="my-2 overflow-x-auto rounded-lg bg-gray-800 p-3 text-xs text-green-300">
+          <code>{code}</code>
+        </pre>
+      );
+    }
+    const lines = block.split("\n");
+    return lines.map((line, li) => {
+      const key = `${bi}-${li}`;
+      if (/^\s*[-*]\s/.test(line)) {
+        const content = line.replace(/^\s*[-*]\s/, "");
+        return (
+          <div key={key} className="flex gap-2 py-0.5">
+            <span className="text-brand-400 mt-0.5">•</span>
+            <span dangerouslySetInnerHTML={{ __html: formatInline(content) }} />
+          </div>
+        );
+      }
+      if (/^\s*\d+\.\s/.test(line)) {
+        const match = line.match(/^(\s*\d+\.\s)(.*)/);
+        if (match) {
+          return (
+            <div key={key} className="flex gap-2 py-0.5">
+              <span className="font-semibold text-brand-400">{match[1]}</span>
+              <span dangerouslySetInnerHTML={{ __html: formatInline(match[2]) }} />
+            </div>
+          );
+        }
+      }
+      if (line.startsWith("### ")) return <h4 key={key} className="mt-3 mb-1 font-bold">{line.slice(4)}</h4>;
+      if (line.startsWith("## ")) return <h3 key={key} className="mt-3 mb-1 font-bold">{line.slice(3)}</h3>;
+      if (line.startsWith("# ")) return <h2 key={key} className="mt-3 mb-1 font-bold">{line.slice(2)}</h2>;
+      if (line.trim() === "") return <div key={key} className="h-2" />;
+      return (
+        <span key={key}>
+          <span dangerouslySetInnerHTML={{ __html: formatInline(line) }} />
+          {li < lines.length - 1 && <br />}
+        </span>
+      );
+    });
+  });
+}
+
+function formatInline(text: string): string {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold">$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/`([^`]+)`/g, '<code class="rounded bg-gray-200 px-1 py-0.5 text-xs dark:bg-dark-600">$1</code>');
+}
+
 export function ChatAssistant() {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [currentSession, setCurrentSession] = useState<string | null>(null);
@@ -213,7 +268,11 @@ export function ChatAssistant() {
                           : "bg-gray-100 text-gray-900 dark:bg-dark-700 dark:text-white"
                       )}
                     >
-                      {msg.content || (
+                      {msg.content ? (
+                        <div className="whitespace-pre-wrap leading-relaxed">
+                          {formatReply(msg.content)}
+                        </div>
+                      ) : (
                         <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
                       )}
                     </div>
