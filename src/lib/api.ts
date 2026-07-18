@@ -59,14 +59,46 @@ export interface Stats {
   recentItems: LearningItem[];
 }
 
+function getSessionToken(): string | null {
+  if (typeof document === "undefined") return null;
+  const cookies = document.cookie.split(";");
+  for (const cookie of cookies) {
+    const [name, value] = cookie.trim().split("=");
+    if (name === "better-auth.session_token" || name === "__Secure-better-auth.session_token") {
+      return value || null;
+    }
+  }
+  return null;
+}
+
+function handleAuthError(): never {
+  const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
+  const loginUrl = `/login?callbackUrl=${encodeURIComponent(currentPath)}`;
+  if (typeof window !== "undefined") {
+    window.location.href = loginUrl;
+  }
+  throw new Error("Unauthorized: Session expired or invalid token.");
+}
+
 async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
+  const token = getSessionToken();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(options?.headers as Record<string, string>),
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${API_BASE}${endpoint}`, {
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
+    headers,
   });
+
+  if (res.status === 401) {
+    handleAuthError();
+  }
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({ error: "Request failed" }));
@@ -74,6 +106,37 @@ async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<Api
   }
 
   return res.json();
+}
+
+async function fetchStream(
+  endpoint: string,
+  body: Record<string, unknown>
+): Promise<Response> {
+  const token = getSessionToken();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const res = await fetch(`${API_BASE}${endpoint}`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+  });
+
+  if (res.status === 401) {
+    handleAuthError();
+  }
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ error: "Request failed" }));
+    throw new Error(error.error || `HTTP ${res.status}`);
+  }
+
+  return res;
 }
 
 export const api = {
@@ -112,13 +175,7 @@ export const api = {
 
   chat: {
     stream: async function* (sessionId: string, message: string, context?: string) {
-      const res = await fetch(`${API_BASE}/api/chat/stream`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId, message, context }),
-      });
-
-      if (!res.ok) throw new Error("Chat request failed");
+      const res = await fetchStream("/api/chat/stream", { sessionId, message, context });
 
       const reader = res.body?.getReader();
       if (!reader) throw new Error("No response stream");
