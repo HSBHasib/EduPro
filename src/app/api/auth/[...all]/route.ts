@@ -10,6 +10,7 @@ await client.connect();
 const db = client.db("EduPro");
 
 const authInstance = betterAuth({
+  baseURL: process.env.NEXT_PUBLIC_APP_URL || "",
   database: mongodbAdapter(db),
   secret: process.env.BETTER_AUTH_SECRET!,
   emailAndPassword: {

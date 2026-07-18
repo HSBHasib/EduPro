@@ -20,18 +20,14 @@ interface AnalysisResult {
 }
 
 async function extractTextFromPDF(file: File): Promise<string> {
-  const pdfjsLib = await import("pdfjs-dist");
+  const pdfjsLib = await import("pdfjs-dist/build/pdf");
 
   pdfjsLib.GlobalWorkerOptions.workerSrc = "";
   pdfjsLib.GlobalWorkerOptions.workerPort = null;
 
   const arrayBuffer = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({
-    data: arrayBuffer,
-    useWorkerFetch: false,
-    isEvalSupported: false,
-    useSystemFonts: true,
-  }).promise;
+  const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+  const pdf = await loadingTask.promise;
   const textParts: string[] = [];
 
   for (let i = 1; i <= pdf.numPages; i++) {
