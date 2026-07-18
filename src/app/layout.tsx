@@ -3,8 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { HeroUIProvider } from "@heroui/system";
-import { ToastProvider } from "@heroui/toast";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,12 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen font-sans antialiased">
-        <HeroUIProvider>
-          <ToastProvider />
-          <Navbar />
-          <main className="min-h-[calc(100vh-4rem)]">{children}</main>
-          <Footer />
-        </HeroUIProvider>
+        <Toaster position="top-right" />
+        <Navbar />
+        <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+        <Footer />
       </body>
     </html>
   );

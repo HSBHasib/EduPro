@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { api, LearningItem } from "@/lib/api";
-import { addToast } from "@heroui/toast";
+import toast from "react-hot-toast";
 
 const priorityVariant = {
   low: "success" as const,
@@ -44,10 +44,10 @@ export function ManageContent() {
     try {
       await api.items.delete(deleteTarget._id);
       setItems(items.filter((item) => item._id !== deleteTarget._id));
-      addToast({ title: `"${deleteTarget.title}" deleted successfully`, color: "success" });
+      toast.success(`"${deleteTarget.title}" deleted successfully`);
       setDeleteTarget(null);
     } catch {
-      addToast({ title: "Failed to delete item", color: "danger" });
+      toast.error("Failed to delete item");
     } finally {
       setDeleting(false);
     }
