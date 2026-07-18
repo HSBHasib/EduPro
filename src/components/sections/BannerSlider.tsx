@@ -3,7 +3,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, Brain, BookOpen } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+  Brain,
+  BookOpen,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 const slides = [
@@ -85,7 +92,9 @@ export function BannerSlider() {
   return (
     <section className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-28">
       {/* Background gradient */}
-      <div className={`absolute inset-0 bg-gradient-to-b ${slide.gradient} transition-all duration-700`} />
+      <div
+        className={`absolute inset-0 bg-gradient-to-b ${slide.gradient} transition-all duration-700`}
+      />
       <div className="absolute left-1/2 top-0 -z-10 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-gradient-to-b from-brand-300/10 to-transparent blur-3xl" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -106,7 +115,9 @@ export function BannerSlider() {
             >
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur-sm dark:border-white/10">
                 <Icon className="h-4 w-4 text-brand-400" />
-                <span className="text-gray-700 dark:text-gray-300">{slide.tag}</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  {slide.tag}
+                </span>
               </div>
 
               <h1 className="mb-6 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl lg:text-6xl">
@@ -142,22 +153,8 @@ export function BannerSlider() {
           </AnimatePresence>
 
           {/* Navigation arrows */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4">
-            <button
-              onClick={prev}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white/80 text-gray-600 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:shadow-md dark:border-dark-600 dark:bg-dark-800/80 dark:text-gray-400 dark:hover:bg-dark-700"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-          </div>
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4">
-            <button
-              onClick={next}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white/80 text-gray-600 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:shadow-md dark:border-dark-600 dark:bg-dark-800/80 dark:text-gray-400 dark:hover:bg-dark-700"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </div>
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4"></div>
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4"></div>
 
           {/* Dots */}
           <div className="mt-10 flex items-center justify-center gap-2">
