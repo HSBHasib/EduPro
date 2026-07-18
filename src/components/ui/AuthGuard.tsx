@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "@/lib/auth";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -10,16 +10,23 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [checked, setChecked] = useState(false);
+  const redirectTimer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (isPending) return;
 
-    if (!session) {
-      router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
-      return;
-    }
+    // Give a small delay to ensure cookie is sent and session is resolved
+    redirectTimer.current = setTimeout(() => {
+      if (!session) {
+        router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
+      } else {
+        setChecked(true);
+      }
+    }, 300);
 
-    setChecked(true);
+    return () => {
+      if (redirectTimer.current) clearTimeout(redirectTimer.current);
+    };
   }, [session, isPending, router, pathname]);
 
   if (isPending || !checked) {

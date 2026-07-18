@@ -20,6 +20,18 @@ const authInstance = betterAuth({
   session: {
     expiresIn: 60 * 60 * 24 * 7,
     updateAge: 60 * 60 * 24,
+    cookieCache: {
+      enabled: true,
+      maxAge: 60 * 60 * 24 * 7,
+    },
+  },
+  advanced: {
+    defaultCookieAttributes: {
+      secure: false,
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+    },
   },
   socialProviders: {
     google: {
