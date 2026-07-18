@@ -11,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { loginSchema, type LoginInput } from "@/lib/validations";
 import { authClient } from "@/lib/auth";
 import { useCallbackUrl } from "@/hooks/useCallbackUrl";
-import toast from "react-hot-toast";
+import { addToast } from "@heroui/toast";
 
 function GoogleIcon() {
   return (
@@ -39,10 +39,10 @@ export function LoginContent() {
     setLoading(true);
     try {
       const { error } = await authClient.signIn.email({ email: data.email, password: data.password });
-      if (error) { toast.error(error.message || "Invalid credentials"); return; }
-      toast.success("Welcome back!");
+      if (error) { addToast({ title: error.message || "Invalid credentials", color: "danger" }); return; }
+      addToast({ title: "Welcome back!", color: "success" });
       router.push(getPostAuthRedirect());
-    } catch { toast.error("Something went wrong. Please try again."); }
+    } catch { addToast({ title: "Something went wrong. Please try again.", color: "danger" }); }
     finally { setLoading(false); }
   }
 
@@ -50,8 +50,8 @@ export function LoginContent() {
     setGoogleLoading(true);
     try {
       const { error } = await authClient.signIn.social({ provider: "google", callbackURL: getPostAuthRedirect() });
-      if (error) toast.error(error.message || "Google sign-in failed");
-    } catch { toast.error("Google sign-in failed. Please try again."); }
+      if (error) addToast({ title: error.message || "Google sign-in failed", color: "danger" });
+    } catch { addToast({ title: "Google sign-in failed. Please try again.", color: "danger" }); }
     finally { setGoogleLoading(false); }
   }
 

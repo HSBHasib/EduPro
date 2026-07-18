@@ -11,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { registerSchema, type RegisterInput } from "@/lib/validations";
 import { authClient } from "@/lib/auth";
 import { useCallbackUrl } from "@/hooks/useCallbackUrl";
-import toast from "react-hot-toast";
+import { addToast } from "@heroui/toast";
 
 function GoogleIcon() {
   return (
@@ -61,14 +61,14 @@ export function RegisterContent() {
         name: data.name,
       });
       if (error) {
-        toast.error(error.message || "Registration failed");
+        addToast({ title: error.message || "Registration failed", color: "danger" });
         return;
       }
       await authClient.signOut();
-      toast.success("Account created! Please sign in.");
+      addToast({ title: "Account created! Please sign in.", color: "success" });
       router.push(getLoginUrl(callbackUrl));
     } catch {
-      toast.error("Something went wrong. Please try again.");
+      addToast({ title: "Something went wrong. Please try again.", color: "danger" });
     } finally {
       setLoading(false);
     }
@@ -81,9 +81,9 @@ export function RegisterContent() {
         provider: "google",
         callbackURL: getPostAuthRedirect(),
       });
-      if (error) toast.error(error.message || "Google sign-in failed");
+      if (error) addToast({ title: error.message || "Google sign-in failed", color: "danger" });
     } catch {
-      toast.error("Google sign-in failed. Please try again.");
+      addToast({ title: "Google sign-in failed. Please try again.", color: "danger" });
     } finally {
       setGoogleLoading(false);
     }

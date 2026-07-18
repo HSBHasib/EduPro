@@ -8,7 +8,7 @@ import { Send, Loader2, Image, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { addItemSchema, type AddItemInput } from "@/lib/validations";
 import { api } from "@/lib/api";
-import toast from "react-hot-toast";
+import { addToast } from "@heroui/toast";
 
 const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMGBB_API_KEY || "";
 
@@ -59,14 +59,14 @@ export function AddItemForm() {
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { toast.error("Image must be under 5MB"); return; }
+    if (file.size > 5 * 1024 * 1024) { addToast({ title: "Image must be under 5MB", color: "danger" }); return; }
     setPreview(URL.createObjectURL(file));
     setUploadingImage(true);
     try {
       const url = await uploadToImgBB(file);
       setImageUrl(url);
-      toast.success("Image uploaded!");
-    } catch { toast.error("Failed to upload image"); setPreview(null); }
+      addToast({ title: "Image uploaded!", color: "success" });
+    } catch { addToast({ title: "Failed to upload image", color: "danger" }); setPreview(null); }
     finally { setUploadingImage(false); }
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
@@ -82,12 +82,12 @@ export function AddItemForm() {
         thumbnailUrl: imageUrl,
         tags: data.tags ? data.tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
       });
-      toast.success("Material added successfully!");
+      addToast({ title: "Material added successfully!", color: "success" });
       reset();
       setPreview(null);
       setImageUrl("");
       router.push("/items");
-    } catch { toast.error("Failed to add material. Please try again."); }
+    } catch { addToast({ title: "Failed to add material. Please try again.", color: "danger" }); }
     finally { setLoading(false); }
   }
 

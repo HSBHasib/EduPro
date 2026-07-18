@@ -68,6 +68,15 @@ export interface Stats {
   recentItems: LearningItem[];
 }
 
+export interface MyStats {
+  totalItems: number;
+  totalViews: number;
+  categories: Array<{ _id: string; count: number }>;
+  monthlyData: Array<{ name: string; items: number }>;
+  priorityData: Array<{ name: string; value: number }>;
+  recentItems: LearningItem[];
+}
+
 async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
   const res = await fetch(endpoint, {
     ...options,
@@ -149,6 +158,7 @@ export const api = {
       if (params?.limit) query.set("limit", String(params.limit));
       return fetchAPI<LearningItem[]>(`/api/items/mine?${query.toString()}`);
     },
+    mineStats: () => fetchAPI<MyStats>("/api/items/mine/stats"),
   },
 
   chat: {

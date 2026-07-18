@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroui/system": "^2.4.28",
+    "@heroui/toast": "^2.0.22",
     "@hookform/resolvers": "^5.4.0",
     "better-auth": "^1.6.23",
     "clsx": "^2.1.1",
