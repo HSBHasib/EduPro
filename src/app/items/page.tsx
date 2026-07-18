@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
@@ -26,26 +26,42 @@ const priorityOptions = [
   { value: "low", label: "Low" },
 ];
 
+function buildURL(base: string, params: Record<string, string>) {
+  const url = new URL(base);
+  Object.entries(params).forEach(([key, val]) => {
+    if (val) url.searchParams.set(key, val);
+    else url.searchParams.delete(key);
+  });
+  return url.pathname + url.search;
+}
+
 function ExploreContent() {
   const searchParams = useSearchParams();
-  const initialCategory = searchParams.get("category") || "";
+  const router = useRouter();
 
   const [items, setItems] = useState<LearningItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState(initialCategory);
-  const [priority, setPriority] = useState("");
-  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
 
-  const loadItems = useCallback(async (searchVal: string, cat: string, pri: string, pg: number) => {
+  const search = searchParams.get("search") || "";
+  const category = searchParams.get("category") || "";
+  const priority = searchParams.get("priority") || "";
+  const page = parseInt(searchParams.get("page") || "1", 10);
+
+  const [searchInput, setSearchInput] = useState(search);
+
+  useEffect(() => {
+    setSearchInput(search);
+  }, [search]);
+
+  const loadItems = useCallback(async (s: string, c: string, p: string, pg: number) => {
     setLoading(true);
     try {
       const res = await api.items.list({
-        search: searchVal || undefined,
-        category: cat || undefined,
-        priority: pri || undefined,
+        search: s || undefined,
+        category: c || undefined,
+        priority: p || undefined,
         page: pg,
         limit: 12,
       });
@@ -60,35 +76,42 @@ function ExploreContent() {
 
   useEffect(() => {
     loadItems(search, category, priority, page);
-  }, [page, category, priority, loadItems, search]);
+  }, [search, category, priority, page, loadItems]);
+
+  function updateParams(updates: Record<string, string>) {
+    const base = window.location.origin + "/items";
+    const current: Record<string, string> = {};
+    searchParams.forEach((val, key) => { current[key] = val; });
+    const path = buildURL(base, { ...current, ...updates, page: updates.page || (updates.search !== undefined || updates.category !== undefined || updates.priority !== undefined ? "1" : current.page || "1") });
+    router.push(path, { scroll: false });
+  }
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
-    setPage(1);
-    loadItems(search, category, priority, 1);
-  }
-
-  function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
-    const val = e.target.value;
-    setSearch(val);
+    updateParams({ search: searchInput });
   }
 
   function handleSearchKeyDown(e: React.KeyboardEvent) {
     if (e.key === "Enter") {
       e.preventDefault();
-      setPage(1);
-      loadItems(search, category, priority, 1);
+      updateParams({ search: searchInput });
     }
   }
 
   function handleCategoryChange(val: string) {
-    setCategory(val);
-    setPage(1);
+    updateParams({ category: val });
   }
 
   function handlePriorityChange(val: string) {
-    setPriority(val);
-    setPage(1);
+    updateParams({ priority: val });
+  }
+
+  function handlePageChange(newPage: number) {
+    updateParams({ page: String(newPage) });
+  }
+
+  function clearFilters() {
+    router.push("/items", { scroll: false });
   }
 
   return (
@@ -110,8 +133,8 @@ function ExploreContent() {
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <Input
                   placeholder="Search materials..."
-                  value={search}
-                  onChange={handleSearchInput}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
                   onKeyDown={handleSearchKeyDown}
                   className="pl-10"
                 />
@@ -144,13 +167,37 @@ function ExploreContent() {
                   options={priorityOptions}
                 />
               </div>
-              {(category || priority) && (
+              {(category || priority || search) && (
                 <button
-                  onClick={() => { setCategory(""); setPriority(""); setPage(1); }}
+                  onClick={clearFilters}
                   className="mt-6 text-sm text-brand-400 hover:text-brand-500"
                 >
-                  Clear filters
+                  Clear all filters
                 </button>
+              )}
+            </div>
+          )}
+
+          {(search || category || priority) && (
+            <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+              <span>Active filters:</span>
+              {search && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-brand-300/10 px-3 py-1 text-brand-500">
+                  Search: &ldquo;{search}&rdquo;
+                  <button onClick={() => { setSearchInput(""); updateParams({ search: "" }); }} className="ml-1 hover:text-brand-600">&times;</button>
+                </span>
+              )}
+              {category && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">
+                  {category}
+                  <button onClick={() => updateParams({ category: "" })} className="ml-1 hover:text-blue-700">&times;</button>
+                </span>
+              )}
+              {priority && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-amber-600 dark:bg-amber-900/20 dark:text-amber-400">
+                  {priority}
+                  <button onClick={() => updateParams({ priority: "" })} className="ml-1 hover:text-amber-700">&times;</button>
+                </span>
               )}
             </div>
           )}
@@ -181,7 +228,7 @@ function ExploreContent() {
               ))}
             </div>
             <div className="mt-8">
-              <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+              <Pagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
             </div>
           </>
         )}
