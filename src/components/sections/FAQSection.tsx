@@ -37,7 +37,7 @@ export function FAQSection() {
 
   return (
     <section id="faq" className="border-t border-gray-200 bg-gray-50 py-14 dark:border-dark-700 dark:bg-dark-900/50 lg:py-20">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

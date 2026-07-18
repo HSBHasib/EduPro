@@ -67,14 +67,6 @@ export function RegisterContent() {
         </div>
         <Card>
           <CardContent className="p-6">
-            <Button variant="outline" onClick={handleGoogleSignIn} disabled={googleLoading} className="w-full gap-3">
-              {googleLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <GoogleIcon />}
-              {googleLoading ? "Connecting to Google..." : "Continue with Google"}
-            </Button>
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200 dark:border-dark-600" /></div>
-              <div className="relative flex justify-center text-sm"><span className="bg-white px-3 text-gray-400 dark:bg-dark-800 dark:text-gray-500">or sign up with email</span></div>
-            </div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
@@ -106,12 +98,25 @@ export function RegisterContent() {
                 {loading ? "Creating account..." : "Create Account"}
               </Button>
             </form>
+
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200 dark:border-dark-600" /></div>
+              <div className="relative flex justify-center text-sm"><span className="bg-white px-3 text-gray-400 dark:bg-dark-800 dark:text-gray-500">or continue with</span></div>
+            </div>
+
+            <Button variant="outline" onClick={handleGoogleSignIn} disabled={googleLoading} className="w-full gap-3">
+              {googleLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <GoogleIcon />}
+              {googleLoading ? "Connecting to Google..." : "Continue with Google"}
+            </Button>
+
+            <div className="mt-6 border-t border-gray-200 pt-4 dark:border-dark-600">
+              <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                Already have an account?{" "}
+                <Link href={getLoginUrl(callbackUrl)} className="font-medium text-brand-400 hover:text-brand-500">Sign in</Link>
+              </p>
+            </div>
           </CardContent>
         </Card>
-        <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          Already have an account?{" "}
-          <Link href={getLoginUrl(callbackUrl)} className="font-medium text-brand-400 hover:text-brand-500">Sign in</Link>
-        </p>
       </div>
     </div>
   );

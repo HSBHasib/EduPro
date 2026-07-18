@@ -90,7 +90,7 @@ export function BannerSlider() {
   };
 
   return (
-    <section className="relative overflow-hidden py-30">
+    <section className="relative overflow-hidden py-20 lg:py-28">
       {/* Background gradient */}
       <div
         className={`absolute inset-0 bg-gradient-to-b ${slide.gradient} transition-all duration-700`}
@@ -136,7 +136,7 @@ export function BannerSlider() {
                 {slide.description}
               </p>
 
-              <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+              <div className="flex items-center gap-4 flex-row justify-center max-[450px]:flex-col">
                 <Link href={slide.ctaHref}>
                   <Button size="lg" className="gap-2">
                     {slide.cta}
