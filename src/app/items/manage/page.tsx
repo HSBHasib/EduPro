@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { api, LearningItem } from "@/lib/api";
 import toast from "react-hot-toast";
 
@@ -19,6 +20,8 @@ const priorityVariant = {
 export default function ManageItemsPage() {
   const [items, setItems] = useState<LearningItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState<LearningItem | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     loadItems();
@@ -35,15 +38,18 @@ export default function ManageItemsPage() {
     }
   }
 
-  async function handleDelete(id: string, title: string) {
-    if (!confirm(`Are you sure you want to delete "${title}"?`)) return;
-
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
     try {
-      await api.items.delete(id);
-      setItems(items.filter((item) => item._id !== id));
-      toast.success("Item deleted successfully");
-    } catch (err) {
+      await api.items.delete(deleteTarget._id);
+      setItems(items.filter((item) => item._id !== deleteTarget._id));
+      toast.success(`"${deleteTarget.title}" deleted successfully`);
+      setDeleteTarget(null);
+    } catch {
       toast.error("Failed to delete item");
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -127,7 +133,7 @@ export default function ManageItemsPage() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleDelete(item._id, item.title)}
+                              onClick={() => setDeleteTarget(item)}
                               className="text-red-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20"
                             >
                               <Trash2 className="h-4 w-4" />
@@ -142,6 +148,21 @@ export default function ManageItemsPage() {
             )}
           </CardContent>
         </Card>
+
+        <ConfirmDialog
+          open={!!deleteTarget}
+          title="Delete Material"
+          message={
+            deleteTarget
+              ? `Are you sure you want to delete "${deleteTarget.title}"? This action cannot be undone.`
+              : ""
+          }
+          confirmLabel={deleting ? "Deleting..." : "Delete"}
+          cancelLabel="Cancel"
+          danger
+          onConfirm={confirmDelete}
+          onCancel={() => setDeleteTarget(null)}
+        />
       </div>
     </div>
   );

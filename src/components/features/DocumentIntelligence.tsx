@@ -178,19 +178,16 @@ export function DocumentIntelligence() {
       result.actionItems.forEach((item, idx) => {
         if (y > 280) { doc.addPage(); y = margin; }
 
-        doc.setFillColor(255, 245, 238);
-        doc.roundedRect(margin, y - 4, maxWidth, 10, 2, 2, "F");
-
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(9);
-        doc.setTextColor(255, 122, 86);
-        doc.text(`${idx + 1}.`, margin + 3, y + 3);
+        doc.setFontSize(10);
+        doc.setTextColor(50);
+        doc.text(`${idx + 1}.`, margin, y + 4);
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(10);
         doc.setTextColor(60);
-        const lines = doc.splitTextToSize(item, maxWidth - 14);
-        doc.text(lines, margin + 12, y + 3);
+        const lines = doc.splitTextToSize(item, maxWidth - 10);
+        doc.text(lines, margin + 10, y + 4);
         y += Math.max(lines.length * 5, 10) + 4;
       });
     }
