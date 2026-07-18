@@ -29,8 +29,8 @@ export function ItemDetailContent({ id }: { id: string }) {
       const res = await api.items.get(id);
       setItem(res.data.item);
       setRelatedItems(res.data.relatedItems);
-    } catch (err) {
-      console.error("Failed to load item:", err);
+    } catch {
+      setItem(null);
     } finally {
       setLoading(false);
     }
