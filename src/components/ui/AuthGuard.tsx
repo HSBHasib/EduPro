@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "@/lib/auth";
 import { Skeleton } from "@/components/ui/Skeleton";
 
-export function AuthGuard({ children }: { children: React.ReactNode }) {
+export function AuthGuard({ children, redirectTo = "unauthorized" }: { children: React.ReactNode; redirectTo?: string }) {
   const { data: session, isPending } = useSession();
   const router = useRouter();
   const pathname = usePathname();
@@ -17,7 +17,11 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
     redirectTimer.current = setTimeout(() => {
       if (!session) {
-        router.push(`/unauthorized?callbackUrl=${encodeURIComponent(pathname)}`);
+        if (redirectTo === "login") {
+          router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
+        } else {
+          router.push(`/unauthorized?callbackUrl=${encodeURIComponent(pathname)}`);
+        }
       } else {
         setChecked(true);
       }
@@ -26,7 +30,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     return () => {
       if (redirectTimer.current) clearTimeout(redirectTimer.current);
     };
-  }, [session, isPending, router, pathname]);
+  }, [session, isPending, router, pathname, redirectTo]);
 
   if (isPending || !checked) {
     return (

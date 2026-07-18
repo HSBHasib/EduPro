@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AnalyticsPage() {
   return (
-    <AuthGuard>
+    <AuthGuard redirectTo="login">
       <AnalyticsContent />
     </AuthGuard>
   );
