@@ -15,10 +15,9 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (isPending) return;
 
-    // Give a small delay to ensure cookie is sent and session is resolved
     redirectTimer.current = setTimeout(() => {
       if (!session) {
-        router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
+        router.push(`/unauthorized?callbackUrl=${encodeURIComponent(pathname)}`);
       } else {
         setChecked(true);
       }

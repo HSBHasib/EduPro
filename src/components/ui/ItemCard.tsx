@@ -24,7 +24,7 @@ export function ItemCard({ item }: ItemCardProps) {
 
   function handleClick() {
     if (!session) {
-      router.push(`/login?callbackUrl=${encodeURIComponent(`/${item._id}`)}`);
+      router.push(`/unauthorized?callbackUrl=${encodeURIComponent(`/${item._id}`)}`);
     } else {
       router.push(`/${item._id}`);
     }

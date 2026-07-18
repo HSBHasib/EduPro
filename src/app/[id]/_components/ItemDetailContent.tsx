@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { ItemCard } from "@/components/ui/ItemCard";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { api, LearningItem } from "@/lib/api";
+import NotFound from "@/app/not-found";
 
 const priorityVariant = {
   low: "success" as const,
@@ -51,12 +52,7 @@ export function ItemDetailContent({ id }: { id: string }) {
 
   if (!item) {
     return (
-      <div className="pt-24 pb-16 text-center">
-        <p className="text-gray-500 dark:text-gray-400">Item not found.</p>
-        <Link href="/items" className="mt-4 text-brand-400 hover:underline">
-          Back to Explore
-        </Link>
-      </div>
+      <NotFound />
     );
   }
 
