@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { BookOpen, Brain, MessageSquare, FileText, Search, Shield } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/Card";
 
@@ -42,11 +43,36 @@ const features = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" as const },
+  },
+};
+
 export function FeaturesSection() {
   return (
     <section id="features" className="py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-16 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-16 text-center"
+        >
           <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
             Powerful Features for{" "}
             <span className="gradient-text">Effective Learning</span>
@@ -54,27 +80,35 @@ export function FeaturesSection() {
           <p className="mx-auto max-w-2xl text-gray-600 dark:text-gray-400">
             Everything you need to organize, understand, and retain knowledge efficiently.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {features.map((feature) => (
-            <Card key={feature.title} className="group">
-              <CardContent className="p-6">
-                <div
-                  className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.color} shadow-lg`}
-                >
-                  <feature.icon className="h-6 w-6 text-white" />
-                </div>
-                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {feature.description}
-                </p>
-              </CardContent>
-            </Card>
+            <motion.div key={feature.title} variants={itemVariants}>
+              <Card className="group h-full">
+                <CardContent className="p-6">
+                  <div
+                    className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.color} shadow-lg transition-transform group-hover:scale-110`}
+                  >
+                    <feature.icon className="h-6 w-6 text-white" />
+                  </div>
+                  <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {feature.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

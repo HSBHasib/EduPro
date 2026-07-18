@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Code, Cpu, BookMarked, Palette, Briefcase, GraduationCap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/Card";
 import { api } from "@/lib/api";
@@ -24,6 +25,23 @@ const colorMap: Record<string, string> = {
   default: "from-brand-300 to-brand-400",
 };
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.4, ease: "easeOut" as const },
+  },
+};
+
 export function CategoriesSection() {
   const [categories, setCategories] = useState<string[]>([]);
 
@@ -36,38 +54,52 @@ export function CategoriesSection() {
   return (
     <section className="py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-16 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-16 text-center"
+        >
           <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
             Browse by <span className="gradient-text">Category</span>
           </h2>
           <p className="mx-auto max-w-2xl text-gray-600 dark:text-gray-400">
             Discover materials organized by topic and find exactly what you need.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        >
           {categories.map((category) => {
             const Icon = iconMap[category] || iconMap.default;
             const color = colorMap[category] || colorMap.default;
 
             return (
-              <Link key={category} href={`/items?category=${encodeURIComponent(category)}`}>
-                <Card className="group cursor-pointer text-center">
-                  <CardContent className="p-6">
-                    <div
-                      className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${color} shadow-lg transition-transform group-hover:scale-110`}
-                    >
-                      <Icon className="h-8 w-8 text-white" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      {category}
-                    </h3>
-                  </CardContent>
-                </Card>
-              </Link>
+              <motion.div key={category} variants={itemVariants}>
+                <Link href={`/items?category=${encodeURIComponent(category)}`}>
+                  <Card className="group h-full cursor-pointer text-center">
+                    <CardContent className="p-6">
+                      <div
+                        className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${color} shadow-lg transition-transform group-hover:scale-110`}
+                      >
+                        <Icon className="h-8 w-8 text-white" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {category}
+                      </h3>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

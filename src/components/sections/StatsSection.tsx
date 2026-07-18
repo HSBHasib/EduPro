@@ -1,8 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { BookOpen, Users, Eye, TrendingUp } from "lucide-react";
 import { api, Stats } from "@/lib/api";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" as const },
+  },
+};
 
 export function StatsSection() {
   const [stats, setStats] = useState<Stats | null>(null);
@@ -41,9 +59,15 @@ export function StatsSection() {
   return (
     <section className="border-y border-gray-200 bg-gray-50 py-16 dark:border-dark-700 dark:bg-dark-900/50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-2 gap-8 md:grid-cols-4"
+        >
           {statItems.map((item) => (
-            <div key={item.label} className="text-center">
+            <motion.div key={item.label} variants={itemVariants} className="text-center">
               <div className="mb-3 flex justify-center">
                 <div className={`rounded-xl bg-gray-100 p-3 dark:bg-dark-800 ${item.color}`}>
                   <item.icon className="h-6 w-6" />
@@ -53,9 +77,9 @@ export function StatsSection() {
                 {item.value}
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">{item.label}</div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
