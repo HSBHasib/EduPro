@@ -3,7 +3,8 @@ import { ItemDetailContent } from "./_components/ItemDetailContent";
 
 async function getItem(id: string) {
   try {
-    const res = await fetch(`http://localhost:5000/api/items/${id}`, { cache: "no-store" });
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    const res = await fetch(`${backendUrl}/api/items/${id}`, { cache: "no-store" });
     if (!res.ok) return null;
     const data = await res.json();
     return data.data?.item || null;

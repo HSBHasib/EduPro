@@ -10,7 +10,7 @@ import { addItemSchema, type AddItemInput } from "@/lib/validations";
 import { api } from "@/lib/api";
 import toast from "react-hot-toast";
 
-const IMGBB_API_KEY = "6fe9beb1db1baee2381d2eac85688bce";
+const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMGBB_API_KEY || "";
 
 const categoryOptions = [
   { value: "Programming", label: "Programming" },

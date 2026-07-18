@@ -3,9 +3,7 @@ import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { google } from "better-auth/social-providers";
 
-const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  "mongodb+srv://EduPro:CEaplltxGkzsKr8C@cluster0.bwbvnds.mongodb.net/EduPro?appName=Cluster0";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 const client = new MongoClient(MONGODB_URI);
 await client.connect();
@@ -13,7 +11,7 @@ const db = client.db("EduPro");
 
 const authInstance = betterAuth({
   database: mongodbAdapter(db),
-  secret: process.env.BETTER_AUTH_SECRET || "edupro-super-secret-key-change-in-production",
+  secret: process.env.BETTER_AUTH_SECRET!,
   emailAndPassword: {
     enabled: true,
   },
@@ -39,7 +37,10 @@ const authInstance = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
-  trustedOrigins: ["http://localhost:3000", "http://localhost:3001"],
+  trustedOrigins: [
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    "http://localhost:3001",
+  ],
 });
 
 export async function GET(request: Request) {
