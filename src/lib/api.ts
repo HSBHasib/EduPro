@@ -1,4 +1,12 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+// Use relative URLs — browser sends BetterAuth cookies automatically via Next.js proxy
+function handleAuthError(): never {
+  const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
+  const loginUrl = `/login?callbackUrl=${encodeURIComponent(currentPath)}`;
+  if (typeof window !== "undefined") {
+    window.location.href = loginUrl;
+  }
+  throw new Error("Unauthorized: Session expired or invalid token.");
+}
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -59,41 +67,14 @@ export interface Stats {
   recentItems: LearningItem[];
 }
 
-function getSessionToken(): string | null {
-  if (typeof document === "undefined") return null;
-  const cookies = document.cookie.split(";");
-  for (const cookie of cookies) {
-    const [name, value] = cookie.trim().split("=");
-    if (name === "better-auth.session_token" || name === "__Secure-better-auth.session_token") {
-      return value || null;
-    }
-  }
-  return null;
-}
-
-function handleAuthError(): never {
-  const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
-  const loginUrl = `/login?callbackUrl=${encodeURIComponent(currentPath)}`;
-  if (typeof window !== "undefined") {
-    window.location.href = loginUrl;
-  }
-  throw new Error("Unauthorized: Session expired or invalid token.");
-}
-
 async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
-  const token = getSessionToken();
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    ...(options?.headers as Record<string, string>),
-  };
-
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-
-  const res = await fetch(`${API_BASE}${endpoint}`, {
+  const res = await fetch(endpoint, {
     ...options,
-    headers,
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...options?.headers,
+    },
   });
 
   if (res.status === 401) {
@@ -108,22 +89,11 @@ async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<Api
   return res.json();
 }
 
-async function fetchStream(
-  endpoint: string,
-  body: Record<string, unknown>
-): Promise<Response> {
-  const token = getSessionToken();
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
-
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-
-  const res = await fetch(`${API_BASE}${endpoint}`, {
+async function fetchStream(endpoint: string, body: Record<string, unknown>): Promise<Response> {
+  const res = await fetch(endpoint, {
     method: "POST",
-    headers,
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
 
@@ -156,7 +126,8 @@ export const api = {
       if (params?.limit) query.set("limit", String(params.limit));
       return fetchAPI<LearningItem[]>(`/api/items?${query.toString()}`);
     },
-    get: (id: string) => fetchAPI<{ item: LearningItem; relatedItems: LearningItem[] }>(`/api/items/${id}`),
+    get: (id: string) =>
+      fetchAPI<{ item: LearningItem; relatedItems: LearningItem[] }>(`/api/items/${id}`),
     create: (data: Partial<LearningItem>) =>
       fetchAPI<LearningItem>("/api/items", {
         method: "POST",
