@@ -5,7 +5,7 @@ import { google } from "better-auth/social-providers";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-const client = new MongoClient(MONGODB_URI);
+const client = new MongoClient(MONGODB_URI!);
 await client.connect();
 const db = client.db("EduPro");
 
