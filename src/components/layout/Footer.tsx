@@ -29,10 +29,10 @@ const socialLinks = [
 export function Footer() {
   return (
     <footer className="border-t border-gray-200 bg-gray-50 dark:border-dark-700 dark:bg-dark-900">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
+      <div className="mx-auto max-w-6xl px-4 pt-12 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
           {/* Brand */}
-          <div className="col-span-2 sm:col-span-1">
+          <div className="max-w-xs">
             <Link href="/" className="flex items-center gap-2">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-300 to-warm-300">
                 <BookOpen className="h-5 w-5 text-white" />
@@ -61,7 +61,8 @@ export function Footer() {
           </div>
 
           {/* Link columns */}
-          {Object.entries(footerLinks).map(([title, links]) => (
+          <div className="flex flex-wrap gap-x-10 gap-y-8">
+            {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{title}</h3>
               <ul className="mt-3 space-y-2.5">
@@ -78,9 +79,10 @@ export function Footer() {
               </ul>
             </div>
           ))}
+          </div>
         </div>
 
-        <div className="mt-10 border-t border-gray-200 pt-6 dark:border-dark-700">
+        <div className="mt-10 border-t border-gray-200 py-8 dark:border-dark-700">
           <p className="text-center text-xs text-gray-500 dark:text-gray-500">
             &copy; {new Date().getFullYear()} EduPro. All rights reserved. Built by{" "}
             <a
