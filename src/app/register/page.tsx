@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 
 export default function RegisterPage() {
   return (
-    <AuthRedirect>
-      <Suspense fallback={null}>
+    <Suspense fallback={null}>
+      <AuthRedirect>
         <RegisterContent />
-      </Suspense>
-    </AuthRedirect>
+      </AuthRedirect>
+    </Suspense>
   );
 }

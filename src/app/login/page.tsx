@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <AuthRedirect>
-      <Suspense fallback={null}>
+    <Suspense fallback={null}>
+      <AuthRedirect>
         <LoginContent />
-      </Suspense>
-    </AuthRedirect>
+      </AuthRedirect>
+    </Suspense>
   );
 }
