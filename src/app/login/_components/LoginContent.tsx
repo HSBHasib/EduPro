@@ -36,8 +36,8 @@ export function LoginContent() {
   });
 
   function fillDemoCredentials() {
-    setValue("email", "siddik12@gmail.com", { shouldValidate: true });
-    setValue("password", "password123", { shouldValidate: true });
+    setValue("email", "demoemail19@gmail.com", { shouldValidate: true });
+    setValue("password", "demoemail19", { shouldValidate: true });
     toast.success("Demo credentials filled! Click Sign In.");
   }
 
