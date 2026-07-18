@@ -90,7 +90,7 @@ export function BannerSlider() {
   };
 
   return (
-    <section className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-28">
+    <section className="relative overflow-hidden  ">
       {/* Background gradient */}
       <div
         className={`absolute inset-0 bg-gradient-to-b ${slide.gradient} transition-all duration-700`}
@@ -113,7 +113,7 @@ export function BannerSlider() {
                 scale: { duration: 0.3 },
               }}
             >
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur-sm dark:border-white/10">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/25 px-4 py-1.5 text-sm font-medium backdrop-blur-sm dark:border-white/10">
                 <Icon className="h-4 w-4 text-brand-400" />
                 <span className="text-gray-700 dark:text-gray-300">
                   {slide.tag}

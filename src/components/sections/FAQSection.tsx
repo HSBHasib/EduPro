@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 const faqs = [
   {
@@ -38,19 +38,29 @@ export function FAQSection() {
   return (
     <section id="faq" className="border-t border-gray-200 bg-gray-50 py-20 dark:border-dark-700 dark:bg-dark-900/50 lg:py-28">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-16 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-16 text-center"
+        >
           <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
             Frequently Asked <span className="gradient-text">Questions</span>
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
             Got questions? We have answers.
           </p>
-        </div>
+        </motion.div>
 
         <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <div
+            <motion.div
               key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
               className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-dark-700 dark:bg-dark-800"
             >
               <button
@@ -60,24 +70,28 @@ export function FAQSection() {
                 <span className="font-medium text-gray-900 dark:text-white">
                   {faq.question}
                 </span>
-                <ChevronDown
-                  className={cn(
-                    "h-5 w-5 text-gray-500 transition-transform duration-200",
-                    openIndex === index && "rotate-180"
-                  )}
-                />
+                <motion.div
+                  animate={{ rotate: openIndex === index ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronDown className="h-5 w-5 text-gray-500" />
+                </motion.div>
               </button>
-              <div
-                className={cn(
-                  "overflow-hidden transition-all duration-200",
-                  openIndex === index ? "max-h-40" : "max-h-0"
+              <AnimatePresence>
+                {openIndex === index && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: "easeInOut" }}
+                  >
+                    <p className="px-6 pb-6 text-sm text-gray-600 dark:text-gray-400">
+                      {faq.answer}
+                    </p>
+                  </motion.div>
                 )}
-              >
-                <p className="px-6 pb-6 text-sm text-gray-600 dark:text-gray-400">
-                  {faq.answer}
-                </p>
-              </div>
-            </div>
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
       </div>
