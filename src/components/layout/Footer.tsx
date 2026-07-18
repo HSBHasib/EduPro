@@ -29,9 +29,10 @@ const socialLinks = [
 export function Footer() {
   return (
     <footer className="border-t border-gray-200 bg-gray-50 dark:border-dark-700 dark:bg-dark-900">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-16">
-          <div className="max-w-xs">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
+          {/* Brand */}
+          <div className="col-span-2 sm:col-span-1">
             <Link href="/" className="flex items-center gap-2">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-300 to-warm-300">
                 <BookOpen className="h-5 w-5 text-white" />
@@ -41,47 +42,46 @@ export function Footer() {
                 <span>Pro</span>
               </span>
             </Link>
-            <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+            <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
               Empowering your learning journey with AI-driven insights and curated study materials.
             </p>
-            <div className="mt-4 flex items-center gap-3">
+            <div className="mt-4 flex items-center gap-2">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:border-brand-400 hover:text-brand-400 dark:border-dark-600 dark:text-gray-400 dark:hover:border-brand-400 dark:hover:text-brand-300"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:border-brand-400 hover:text-brand-400 dark:border-dark-600 dark:text-gray-400 dark:hover:border-brand-400 dark:hover:text-brand-300"
                 >
-                  <social.icon className="h-4 w-4" />
+                  <social.icon className="h-3.5 w-3.5" />
                 </a>
               ))}
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-14 md:gap-20">
-            {Object.entries(footerLinks).map(([title, links]) => (
-              <div key={title}>
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{title}</h3>
-                <ul className="mt-4 space-y-3">
-                  {links.map((link) => (
-                    <li key={link.label}>
-                      <Link
-                        href={link.href}
-                        className="text-sm text-gray-600 hover:text-brand-400 dark:text-gray-400 dark:hover:text-brand-300"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+          {/* Link columns */}
+          {Object.entries(footerLinks).map(([title, links]) => (
+            <div key={title}>
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{title}</h3>
+              <ul className="mt-3 space-y-2.5">
+                {links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-gray-600 transition-colors hover:text-brand-400 dark:text-gray-400 dark:hover:text-brand-300"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        <div className="mt-8 border-t border-gray-200 pt-8 dark:border-dark-700">
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+        <div className="mt-10 border-t border-gray-200 pt-6 dark:border-dark-700">
+          <p className="text-center text-xs text-gray-500 dark:text-gray-500">
             &copy; {new Date().getFullYear()} EduPro. All rights reserved. Built by{" "}
             <a
               href="https://hasib-portfolio-silk.vercel.app"

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, Menu, X, LogOut, User } from "lucide-react";
+import { BookOpen, Menu, X, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSession, signOut } from "@/lib/auth";
 import { Button } from "@/components/ui/Button";
@@ -42,7 +42,9 @@ export function Navbar() {
     } else {
       document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   async function handleSignOut() {
@@ -61,7 +63,7 @@ export function Navbar() {
         "fixed top-0 z-50 w-full transition-all duration-300",
         scrolled
           ? "border-b border-gray-200/50 bg-white/80 backdrop-blur-xl dark:border-dark-700/50 dark:bg-dark-900/80"
-          : "bg-transparent"
+          : "bg-transparent",
       )}
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -94,7 +96,7 @@ export function Navbar() {
                   "rounded-lg px-4 py-2 text-sm font-medium transition-colors",
                   pathname === link.href
                     ? "bg-brand-300/10 text-brand-500"
-                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-dark-700 dark:hover:text-white"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-dark-700 dark:hover:text-white",
                 )}
               >
                 {link.label}
@@ -112,12 +114,17 @@ export function Navbar() {
               className="flex items-center gap-3"
             >
               <div className="flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1.5 dark:bg-dark-700">
-                <User className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Hi,{" "}
                   {session.user?.name || session.user?.email}
                 </span>
               </div>
-              <Button variant="ghost" size="sm" onClick={handleSignOut} className="gap-1.5">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleSignOut}
+                className="gap-1.5"
+              >
                 <LogOut className="h-4 w-4" />
                 Sign Out
               </Button>
@@ -129,7 +136,9 @@ export function Navbar() {
               className="flex items-center gap-2"
             >
               <Link href="/login">
-                <Button variant="ghost" size="sm">Sign In</Button>
+                <Button variant="ghost" size="sm">
+                  Sign In
+                </Button>
               </Link>
               <Link href="/register">
                 <Button size="sm">Sign Up</Button>
@@ -146,11 +155,23 @@ export function Navbar() {
         >
           <AnimatePresence mode="wait">
             {isOpen ? (
-              <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
+              <motion.div
+                key="close"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
                 <X className="h-5 w-5" />
               </motion.div>
             ) : (
-              <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
+              <motion.div
+                key="menu"
+                initial={{ rotate: 90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: -90, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
                 <Menu className="h-5 w-5" />
               </motion.div>
             )}
@@ -201,13 +222,14 @@ export function Navbar() {
                 <X className="h-5 w-5" />
               </motion.button>
             </div>
-
             {/* User info */}
             {session && (
               <div className="border-b border-gray-200 px-5 py-4 dark:border-dark-700">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-300 to-warm-300 text-sm font-bold text-white">
-                    {(session.user?.name || session.user?.email || "U").charAt(0).toUpperCase()}
+                    {(session.user?.name || session.user?.email || "U")
+                      .charAt(0)
+                      .toUpperCase()}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-sm font-medium text-gray-900 dark:text-white">
@@ -220,7 +242,6 @@ export function Navbar() {
                 </div>
               </div>
             )}
-
             {/* Navigation links */}
             <div className="flex-1 overflow-y-auto px-3 py-4">
               <div className="space-y-1">
@@ -238,7 +259,7 @@ export function Navbar() {
                         "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors",
                         pathname === link.href
                           ? "bg-brand-300/10 text-brand-500"
-                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-dark-700 dark:hover:text-white"
+                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-dark-700 dark:hover:text-white",
                       )}
                     >
                       {link.label}
@@ -247,7 +268,6 @@ export function Navbar() {
                 ))}
               </div>
             </div>
-
             {/* Bottom actions */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -266,7 +286,9 @@ export function Navbar() {
               ) : (
                 <div className="space-y-2">
                   <Link href="/login" onClick={() => setIsOpen(false)}>
-                    <Button variant="outline" className="w-full">Sign In</Button>
+                    <Button variant="outline" className="w-full">
+                      Sign In
+                    </Button>
                   </Link>
                   <Link href="/register" onClick={() => setIsOpen(false)}>
                     <Button className="w-full">Sign Up</Button>
@@ -274,7 +296,8 @@ export function Navbar() {
                 </div>
               )}
             </motion.div>
-e          </motion.div>
+            e{" "}
+          </motion.div>
         )}
       </AnimatePresence>
     </motion.header>
