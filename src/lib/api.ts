@@ -22,6 +22,7 @@ export interface ApiResponse<T> {
 
 export interface LearningItem {
   _id: string;
+  userId: string;
   title: string;
   description: string;
   category: string;
@@ -142,6 +143,12 @@ export const api = {
       fetchAPI<{ message: string }>(`/api/items/${id}`, { method: "DELETE" }),
     categories: () => fetchAPI<string[]>("/api/items/categories"),
     stats: () => fetchAPI<Stats>("/api/items/stats"),
+    mine: (params?: { page?: number; limit?: number }) => {
+      const query = new URLSearchParams();
+      if (params?.page) query.set("page", String(params.page));
+      if (params?.limit) query.set("limit", String(params.limit));
+      return fetchAPI<LearningItem[]>(`/api/items/mine?${query.toString()}`);
+    },
   },
 
   chat: {

@@ -29,7 +29,7 @@ export function ManageContent() {
 
   async function loadItems() {
     try {
-      const res = await api.items.list({ limit: 100 });
+      const res = await api.items.mine({ limit: 100 });
       setItems(res.data);
     } catch (err) {
       console.error("Failed to load items:", err);
