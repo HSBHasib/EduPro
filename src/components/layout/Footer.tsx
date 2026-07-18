@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Github, Linkedin, Mail } from "lucide-react";
 
 const footerLinks = {
   Platform: [
@@ -19,6 +19,12 @@ const footerLinks = {
   ],
 };
 
+const socialLinks = [
+  { label: "GitHub", href: "https://github.com/HSBHasib", icon: Github },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/hasibur-rahman19", icon: Linkedin },
+  { label: "Email", href: "mailto:hasibhsb19@gmail.com", icon: Mail },
+];
+
 export function Footer() {
   return (
     <footer className="border-t border-gray-200 bg-gray-50 dark:border-dark-700 dark:bg-dark-900">
@@ -37,6 +43,19 @@ export function Footer() {
             <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
               Empowering your learning journey with AI-driven insights and curated study materials.
             </p>
+            <div className="mt-4 flex items-center gap-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:border-brand-400 hover:text-brand-400 dark:border-dark-600 dark:text-gray-400 dark:hover:border-brand-400 dark:hover:text-brand-300"
+                >
+                  <social.icon className="h-4 w-4" />
+                </a>
+              ))}
+            </div>
           </div>
 
           {Object.entries(footerLinks).map(([title, links]) => (
@@ -60,7 +79,15 @@ export function Footer() {
 
         <div className="mt-8 border-t border-gray-200 pt-8 dark:border-dark-700">
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-            &copy; {new Date().getFullYear()} EduPro. All rights reserved. Built with AI-powered learning.
+            &copy; {new Date().getFullYear()} EduPro. All rights reserved. Built by{" "}
+            <a
+              href="https://github.com/HSBHasib"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-brand-400 hover:text-brand-500"
+            >
+              Hasibur Rahman
+            </a>
           </p>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { Eye, Clock, Tag } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
+import { useSession } from "@/lib/auth";
 import type { LearningItem } from "@/lib/api";
 
 interface ItemCardProps {
@@ -19,9 +20,14 @@ const priorityVariant = {
 
 export function ItemCard({ item }: ItemCardProps) {
   const router = useRouter();
+  const { data: session } = useSession();
 
   function handleClick() {
-    router.push(`/${item._id}`);
+    if (!session) {
+      router.push(`/login?callbackUrl=${encodeURIComponent(`/${item._id}`)}`);
+    } else {
+      router.push(`/${item._id}`);
+    }
   }
 
   return (
