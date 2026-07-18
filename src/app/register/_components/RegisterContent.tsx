@@ -64,6 +64,7 @@ export function RegisterContent() {
         toast.error(error.message || "Registration failed");
         return;
       }
+      await authClient.signOut();
       toast.success("Account created! Please sign in.");
       router.push(getLoginUrl(callbackUrl));
     } catch {

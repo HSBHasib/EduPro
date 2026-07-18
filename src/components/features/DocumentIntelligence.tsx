@@ -22,8 +22,7 @@ interface AnalysisResult {
 async function extractTextFromPDF(file: File): Promise<string> {
   const pdfjsLib = await import("pdfjs-dist");
 
-  pdfjsLib.GlobalWorkerOptions.workerSrc = "";
-  pdfjsLib.GlobalWorkerOptions.workerPort = null;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
   const arrayBuffer = await file.arrayBuffer();
   const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
