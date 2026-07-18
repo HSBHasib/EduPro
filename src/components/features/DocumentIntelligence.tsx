@@ -36,8 +36,13 @@ export function DocumentIntelligence() {
       const res = await api.documents.analyze(data.content, data.fileName);
       setResult(res.data);
       toast.success("Document analyzed successfully!");
-    } catch {
-      toast.error("Failed to analyze document");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Failed to analyze document";
+      if (msg.includes("429") || msg.includes("quota")) {
+        toast.error("AI service quota exceeded. Please try again later or check your API key.");
+      } else {
+        toast.error(msg.slice(0, 120));
+      }
     } finally {
       setLoading(false);
     }

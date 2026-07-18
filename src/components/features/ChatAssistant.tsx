@@ -91,11 +91,15 @@ export function ChatAssistant() {
 
       loadSessions();
     } catch (err) {
+      const msg = err instanceof Error ? err.message : "Sorry, I encountered an error. Please try again.";
+      const display = msg.includes("429") || msg.includes("quota")
+        ? "AI service quota exceeded. Please try again later or check your API key."
+        : msg.slice(0, 200);
       setMessages((prev) => [
         ...prev.slice(0, -1),
         {
           role: "model",
-          content: "Sorry, I encountered an error. Please try again.",
+          content: display,
           timestamp: new Date().toISOString(),
         },
       ]);
