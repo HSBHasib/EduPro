@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["pdfjs-dist"],
+  transpilePackages: ["pdfjs-dist", "@heroui/toast", "@heroui/system"],
   images: {
     remotePatterns: [
       {
