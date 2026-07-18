@@ -274,7 +274,7 @@ export function Navbar() {
                 </div>
               )}
             </motion.div>
-          </motion.div>
+e          </motion.div>
         )}
       </AnimatePresence>
     </motion.header>

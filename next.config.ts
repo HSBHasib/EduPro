@@ -10,13 +10,14 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
+    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000";
     return {
       beforeFiles: [],
       afterFiles: [],
       fallback: [
         {
           source: "/api/:path*",
-          destination: `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/:path*`,
+          destination: `${backendUrl}/api/:path*`,
         },
       ],
     };
