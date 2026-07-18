@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export function HeroSection() {
@@ -39,6 +39,12 @@ export function HeroSection() {
             <Link href="/items/add">
               <Button variant="outline" size="lg">
                 Add Materials
+              </Button>
+            </Link>
+            <Link href="/analytics">
+              <Button variant="outline" size="lg" className="gap-2">
+                <BarChart3 className="h-4 w-4" />
+                Analytics
               </Button>
             </Link>
           </div>

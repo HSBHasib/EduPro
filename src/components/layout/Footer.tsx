@@ -30,7 +30,7 @@ export function Footer() {
   return (
     <footer className="border-t border-gray-200 bg-gray-50 dark:border-dark-700 dark:bg-dark-900">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+        <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-16">
           <div className="max-w-xs">
             <Link href="/" className="flex items-center gap-2">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-300 to-warm-300">
@@ -59,7 +59,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-12 md:gap-16">
+          <div className="flex flex-wrap gap-10 md:gap-14">
             {Object.entries(footerLinks).map(([title, links]) => (
               <div key={title}>
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{title}</h3>
