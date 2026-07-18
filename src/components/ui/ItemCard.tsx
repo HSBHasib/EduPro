@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Eye, Clock, Tag } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
+import { useSession } from "@/lib/auth";
 import type { LearningItem } from "@/lib/api";
 
 interface ItemCardProps {
@@ -18,9 +19,20 @@ const priorityVariant = {
 };
 
 export function ItemCard({ item }: ItemCardProps) {
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  function handleClick() {
+    if (!session) {
+      router.push(`/login?callbackUrl=${encodeURIComponent(`/${item._id}`)}`);
+    } else {
+      router.push(`/${item._id}`);
+    }
+  }
+
   return (
-    <Link href={`/${item._id}`}>
-      <Card className="group h-full cursor-pointer">
+    <div onClick={handleClick} className="cursor-pointer">
+      <Card className="group h-full">
         <div className="relative overflow-hidden rounded-t-2xl">
           {item.thumbnailUrl ? (
             <img
@@ -77,6 +89,6 @@ export function ItemCard({ item }: ItemCardProps) {
           </div>
         </CardContent>
       </Card>
-    </Link>
+    </div>
   );
 }
