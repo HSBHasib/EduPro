@@ -49,7 +49,7 @@ export function Navbar() {
 
   async function handleSignOut() {
     await signOut();
-    window.location.href = "/";
+    window.location.reload();
   }
 
   const navLinks = session ? [...publicLinks, ...protectedLinks] : publicLinks;
