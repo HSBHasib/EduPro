@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { google } from "better-auth/social-providers";
 
 const MONGODB_URI =
   process.env.MONGODB_URI ||
@@ -19,6 +20,12 @@ const authInstance = betterAuth({
   session: {
     expiresIn: 60 * 60 * 24 * 7,
     updateAge: 60 * 60 * 24,
+  },
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    },
   },
   trustedOrigins: ["http://localhost:3000", "http://localhost:3001"],
 });
