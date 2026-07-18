@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Send, ArrowLeft, Loader2 } from "lucide-react";
+import { Send, ArrowLeft, Loader2, Image, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { addItemSchema, type AddItemInput } from "@/lib/validations";
 import { api } from "@/lib/api";
 import toast from "react-hot-toast";
+
+const IMGBB_API_KEY = "6fe9beb1db1baee2381d2eac85688bce";
 
 const categoryOptions = [
   { value: "Programming", label: "Programming" },
@@ -26,9 +28,27 @@ const priorityOptions = [
   { value: "high", label: "High" },
 ];
 
+async function uploadToImgBB(file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) throw new Error("Image upload failed");
+  const data = await res.json();
+  return data.data.url;
+}
+
 export default function AddItemPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
@@ -42,19 +62,51 @@ export default function AddItemPage() {
     },
   });
 
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be under 5MB");
+      return;
+    }
+
+    setPreview(URL.createObjectURL(file));
+    setUploadingImage(true);
+
+    try {
+      const url = await uploadToImgBB(file);
+      setImageUrl(url);
+      toast.success("Image uploaded!");
+    } catch {
+      toast.error("Failed to upload image");
+      setPreview(null);
+    } finally {
+      setUploadingImage(false);
+    }
+
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
+  function removeImage() {
+    setPreview(null);
+    setImageUrl("");
+  }
+
   async function onSubmit(data: AddItemInput) {
     setLoading(true);
     try {
       await api.items.create({
         ...data,
         priority: data.priority as "low" | "medium" | "high",
+        thumbnailUrl: imageUrl,
         tags: data.tags
           ? data.tags.split(",").map((t) => t.trim()).filter(Boolean)
           : [],
       });
       toast.success("Material added successfully!");
       router.push("/items");
-    } catch (err) {
+    } catch {
       toast.error("Failed to add material. Please try again.");
     } finally {
       setLoading(false);
@@ -78,6 +130,50 @@ export default function AddItemPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Image Upload */}
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Thumbnail Image
+                </label>
+                {preview ? (
+                  <div className="relative">
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      className="h-48 w-full rounded-xl object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={removeImage}
+                      className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                    {uploadingImage && (
+                      <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/40">
+                        <Loader2 className="h-8 w-8 animate-spin text-white" />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 px-6 py-10 text-center transition-colors hover:border-brand-300 hover:bg-brand-300/5 dark:border-dark-600 dark:bg-dark-800 dark:hover:border-brand-400">
+                    <Image className="h-10 w-10 text-gray-400" />
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      Click to upload an image
+                    </span>
+                    <span className="text-xs text-gray-400">PNG, JPG up to 5MB</span>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg,image/jpg,image/webp"
+                      onChange={handleImageUpload}
+                      disabled={uploadingImage}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
+
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Title *
@@ -183,7 +279,7 @@ export default function AddItemPage() {
                 {errors.sourceUrl && <p className="mt-1 text-xs text-red-500">{errors.sourceUrl.message}</p>}
               </div>
 
-              <Button type="submit" size="lg" disabled={loading} className="w-full gap-2">
+              <Button type="submit" size="lg" disabled={loading || uploadingImage} className="w-full gap-2">
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 {loading ? "Adding..." : "Add Material"}
               </Button>

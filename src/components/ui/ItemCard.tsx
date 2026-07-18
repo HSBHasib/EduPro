@@ -22,22 +22,30 @@ export function ItemCard({ item }: ItemCardProps) {
     <Link href={`/${item._id}`}>
       <Card className="group h-full cursor-pointer">
         <div className="relative overflow-hidden rounded-t-2xl">
-          <div
-            className={cn(
-              "h-40 bg-gradient-to-br transition-all duration-300 group-hover:scale-105",
-              item.priority === "high"
-                ? "from-red-400/20 to-red-500/10"
-                : item.priority === "medium"
-                ? "from-warm-300/30 to-warm-400/10"
-                : "from-green-400/20 to-green-500/10"
-            )}
-          >
-            <div className="flex h-full items-center justify-center">
-              <span className="text-6xl font-bold text-gray-200/50 dark:text-dark-600">
-                {item.title.charAt(0).toUpperCase()}
-              </span>
+          {item.thumbnailUrl ? (
+            <img
+              src={item.thumbnailUrl}
+              alt={item.title}
+              className="h-40 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <div
+              className={cn(
+                "h-40 bg-gradient-to-br transition-all duration-300 group-hover:scale-105",
+                item.priority === "high"
+                  ? "from-red-400/20 to-red-500/10"
+                  : item.priority === "medium"
+                  ? "from-warm-300/30 to-warm-400/10"
+                  : "from-green-400/20 to-green-500/10"
+              )}
+            >
+              <div className="flex h-full items-center justify-center">
+                <span className="text-6xl font-bold text-gray-200/50 dark:text-dark-600">
+                  {item.title.charAt(0).toUpperCase()}
+                </span>
+              </div>
             </div>
-          </div>
+          )}
           <div className="absolute right-3 top-3">
             <Badge variant={priorityVariant[item.priority]}>{item.priority}</Badge>
           </div>

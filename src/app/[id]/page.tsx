@@ -75,6 +75,14 @@ export default function ItemDetailPage() {
 
         {/* Main Content */}
         <article>
+          {item.thumbnailUrl && (
+            <img
+              src={item.thumbnailUrl}
+              alt={item.title}
+              className="mb-6 h-64 w-full rounded-2xl object-cover"
+            />
+          )}
+
           <div className="mb-6 flex flex-wrap items-center gap-3">
             <Badge variant={priorityVariant[item.priority]}>{item.priority}</Badge>
             <Badge variant="outline">{item.category}</Badge>

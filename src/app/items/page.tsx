@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/Input";
@@ -39,18 +39,14 @@ function ExploreContent() {
   const [totalPages, setTotalPages] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
 
-  useEffect(() => {
-    loadItems();
-  }, [page, category, priority]);
-
-  async function loadItems() {
+  const loadItems = useCallback(async (searchVal: string, cat: string, pri: string, pg: number) => {
     setLoading(true);
     try {
       const res = await api.items.list({
-        search: search || undefined,
-        category: category || undefined,
-        priority: priority || undefined,
-        page,
+        search: searchVal || undefined,
+        category: cat || undefined,
+        priority: pri || undefined,
+        page: pg,
         limit: 12,
       });
       setItems(res.data);
@@ -60,18 +56,44 @@ function ExploreContent() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    loadItems(search, category, priority, page);
+  }, [page, category, priority, loadItems, search]);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     setPage(1);
-    loadItems();
+    loadItems(search, category, priority, 1);
+  }
+
+  function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = e.target.value;
+    setSearch(val);
+  }
+
+  function handleSearchKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setPage(1);
+      loadItems(search, category, priority, 1);
+    }
+  }
+
+  function handleCategoryChange(val: string) {
+    setCategory(val);
+    setPage(1);
+  }
+
+  function handlePriorityChange(val: string) {
+    setPriority(val);
+    setPage(1);
   }
 
   return (
     <div className="pt-24 pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
             Explore Learning Materials
@@ -81,7 +103,6 @@ function ExploreContent() {
           </p>
         </div>
 
-        {/* Search & Filters */}
         <div className="mb-8 space-y-4">
           <div className="flex gap-4">
             <form onSubmit={handleSearch} className="flex-1">
@@ -90,7 +111,8 @@ function ExploreContent() {
                 <Input
                   placeholder="Search materials..."
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={handleSearchInput}
+                  onKeyDown={handleSearchKeyDown}
                   className="pl-10"
                 />
               </div>
@@ -110,10 +132,7 @@ function ExploreContent() {
                 <Select
                   label="Category"
                   value={category}
-                  onChange={(e) => {
-                    setCategory(e.target.value);
-                    setPage(1);
-                  }}
+                  onChange={(e) => handleCategoryChange(e.target.value)}
                   options={categoryOptions}
                 />
               </div>
@@ -121,18 +140,22 @@ function ExploreContent() {
                 <Select
                   label="Priority"
                   value={priority}
-                  onChange={(e) => {
-                    setPriority(e.target.value);
-                    setPage(1);
-                  }}
+                  onChange={(e) => handlePriorityChange(e.target.value)}
                   options={priorityOptions}
                 />
               </div>
+              {(category || priority) && (
+                <button
+                  onClick={() => { setCategory(""); setPriority(""); setPage(1); }}
+                  className="mt-6 text-sm text-brand-400 hover:text-brand-500"
+                >
+                  Clear filters
+                </button>
+              )}
             </div>
           )}
         </div>
 
-        {/* Items Grid */}
         {loading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (

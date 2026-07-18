@@ -1,5 +1,6 @@
 import { BannerSlider } from "@/components/sections/BannerSlider";
 import { FeaturesSection } from "@/components/sections/FeaturesSection";
+import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
 import { StatsSection } from "@/components/sections/StatsSection";
 import { CategoriesSection } from "@/components/sections/CategoriesSection";
 import { FAQSection } from "@/components/sections/FAQSection";
@@ -10,6 +11,7 @@ export default function HomePage() {
     <>
       <BannerSlider />
       <FeaturesSection />
+      <HowItWorksSection />
       <StatsSection />
       <CategoriesSection />
       <TestimonialsSection />
