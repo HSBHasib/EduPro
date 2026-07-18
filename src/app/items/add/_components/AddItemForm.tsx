@@ -49,6 +49,7 @@ export function AddItemForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<AddItemInput>({
     resolver: zodResolver(addItemSchema),
@@ -82,6 +83,9 @@ export function AddItemForm() {
         tags: data.tags ? data.tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
       });
       toast.success("Material added successfully!");
+      reset();
+      setPreview(null);
+      setImageUrl("");
       router.push("/items");
     } catch { toast.error("Failed to add material. Please try again."); }
     finally { setLoading(false); }

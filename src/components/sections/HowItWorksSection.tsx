@@ -61,12 +61,6 @@ export function HowItWorksSection() {
               transition={{ duration: 0.5, delay: index * 0.15 }}
               className="relative"
             >
-              {index < steps.length - 1 && (
-                <div className="absolute left-[calc(50%+40px)] top-10 hidden w-[calc(100%-80px)] md:block">
-                  <ArrowRight className="h-6 w-6 text-gray-300 dark:text-dark-600" />
-                </div>
-              )}
-
               <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm transition-all hover:shadow-md dark:border-dark-700 dark:bg-dark-800">
                 <div className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-dark-400">
                   Step {step.step}
