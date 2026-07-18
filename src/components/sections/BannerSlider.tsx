@@ -10,6 +10,7 @@ import {
   Sparkles,
   Brain,
   BookOpen,
+  BarChart3,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
@@ -37,15 +38,15 @@ const slides = [
     accent: "from-purple-400 to-purple-500",
   },
   {
-    icon: BookOpen,
-    tag: "Curated Resources",
-    title: "Explore a World of Knowledge",
+    icon: BarChart3,
+    tag: "Personal Analytics",
+    title: "Track Your Learning Progress",
     description:
-      "Browse hundreds of organized learning materials across programming, science, design, and business categories.",
-    cta: "Browse Materials",
-    ctaHref: "/items",
-    gradient: "from-warm-300/20 via-warm-400/10 to-transparent",
-    accent: "from-warm-300 to-warm-400",
+      "Visualize your growth with interactive charts — see items created, priority distribution, monthly trends, and category breakdowns.",
+    cta: "View Analytics",
+    ctaHref: "/analytics",
+    gradient: "from-green-400/20 via-green-500/10 to-transparent",
+    accent: "from-green-400 to-green-500",
   },
 ];
 
@@ -146,6 +147,12 @@ export function BannerSlider() {
                 <Link href="/features">
                   <Button variant="outline" size="lg">
                     AI Features
+                  </Button>
+                </Link>
+                <Link href="/analytics">
+                  <Button variant="outline" size="lg" className="gap-2">
+                    <BarChart3 className="h-4 w-4" />
+                    Analytics
                   </Button>
                 </Link>
               </div>
