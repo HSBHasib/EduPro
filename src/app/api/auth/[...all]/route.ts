@@ -1,17 +1,18 @@
 import { betterAuth } from "better-auth";
+import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { MongoClient } from "mongodb";
 
-const client = new MongoClient(
-  process.env.MONGODB_URI || "mongodb+srv://EduPro:CEaplltxGkzsKr8C@cluster0.bwbvnds.mongodb.net/EduPro?appName=Cluster0"
-);
+const MONGODB_URI =
+  process.env.MONGODB_URI ||
+  "mongodb+srv://EduPro:CEaplltxGkzsKr8C@cluster0.bwbvnds.mongodb.net/EduPro?appName=Cluster0";
 
-const db = client.db();
+const client = new MongoClient(MONGODB_URI);
+await client.connect();
+const db = client.db("EduPro");
 
 export const auth = betterAuth({
-  database: {
-    type: "mongodb",
-    db,
-  },
+  database: mongodbAdapter(db),
+  secret: process.env.BETTER_AUTH_SECRET || "edupro-super-secret-key-change-in-production",
   emailAndPassword: {
     enabled: true,
   },
@@ -19,10 +20,7 @@ export const auth = betterAuth({
     expiresIn: 60 * 60 * 24 * 7,
     updateAge: 60 * 60 * 24,
   },
-  trustedOrigins: [
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000",
-    "http://localhost:3000",
-  ],
+  trustedOrigins: ["http://localhost:3000", "http://localhost:3001"],
 });
 
 export async function GET(request: Request) {
