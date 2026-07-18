@@ -21,6 +21,8 @@ The platform includes secure authentication, Google OAuth, user-specific content
 
 *Live screenshots available at the deployed link above.*
 
+<img width="1376" height="768" alt="promptHive1" src="https://github.com/user-attachments/assets/401d8f24-64c0-436c-807a-aee7fb02ec17" />
+
 ---
 
 # Technologies Used
@@ -220,6 +222,6 @@ Building EduPro pushed me across the full stack and taught me several real-world
 
 **Hasibur Rahman**
 - MERN Stack Developer & Aspiring Software Engineer
-- Gazipur, Dhaka, Bangladesh
+- Tongi, Gazipur, Bangladesh
 - GitHub: [@HSBHasib](https://github.com/HSBHasib)
 - LinkedIn: [Hasibur Rahman](https://www.linkedin.com/in/hasibur-rahman19)
