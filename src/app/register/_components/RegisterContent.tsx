@@ -113,7 +113,7 @@ export function RegisterContent() {
                 <input
                   {...register("name")}
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Enter your name"
                   className="flex h-10 w-full rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 dark:border-dark-600 dark:bg-dark-800 dark:text-white dark:placeholder:text-gray-500"
                 />
                 {errors.name && (
@@ -129,7 +129,7 @@ export function RegisterContent() {
                 <input
                   {...register("email")}
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="Enter your email"
                   className="flex h-10 w-full rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 dark:border-dark-600 dark:bg-dark-800 dark:text-white dark:placeholder:text-gray-500"
                 />
                 {errors.email && (
