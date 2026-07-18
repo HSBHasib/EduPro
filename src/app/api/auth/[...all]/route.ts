@@ -1,6 +1,6 @@
+import { MongoClient } from "mongodb";
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { MongoClient } from "mongodb";
 
 const MONGODB_URI =
   process.env.MONGODB_URI ||
@@ -10,7 +10,7 @@ const client = new MongoClient(MONGODB_URI);
 await client.connect();
 const db = client.db("EduPro");
 
-export const auth = betterAuth({
+const authInstance = betterAuth({
   database: mongodbAdapter(db),
   secret: process.env.BETTER_AUTH_SECRET || "edupro-super-secret-key-change-in-production",
   emailAndPassword: {
@@ -24,9 +24,9 @@ export const auth = betterAuth({
 });
 
 export async function GET(request: Request) {
-  return auth.handler(request);
+  return authInstance.handler(request);
 }
 
 export async function POST(request: Request) {
-  return auth.handler(request);
+  return authInstance.handler(request);
 }
