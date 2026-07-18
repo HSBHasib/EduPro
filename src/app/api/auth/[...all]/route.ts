@@ -25,7 +25,7 @@ const authInstance = betterAuth({
   },
   advanced: {
     defaultCookieAttributes: {
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       sameSite: "lax",
       path: "/",

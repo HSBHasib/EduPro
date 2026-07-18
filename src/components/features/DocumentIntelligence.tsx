@@ -21,10 +21,17 @@ interface AnalysisResult {
 
 async function extractTextFromPDF(file: File): Promise<string> {
   const pdfjsLib = await import("pdfjs-dist");
-  pdfjsLib.GlobalWorkerOptions.workerSrc = process.env.NEXT_PUBLIC_PDF_WORKER_URL || `https://unpkg.com/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs`;
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "";
+  pdfjsLib.GlobalWorkerOptions.workerPort = null;
 
   const arrayBuffer = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const pdf = await pdfjsLib.getDocument({
+    data: arrayBuffer,
+    useWorkerFetch: false,
+    isEvalSupported: false,
+    useSystemFonts: true,
+  }).promise;
   const textParts: string[] = [];
 
   for (let i = 1; i <= pdf.numPages; i++) {
