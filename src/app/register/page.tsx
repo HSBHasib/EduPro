@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { AuthRedirect } from "@/components/ui/AuthRedirect";
 import { RegisterContent } from "./_components/RegisterContent";
 
 export const metadata: Metadata = {
@@ -9,8 +10,10 @@ export const metadata: Metadata = {
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={null}>
-      <RegisterContent />
-    </Suspense>
+    <AuthRedirect>
+      <Suspense fallback={null}>
+        <RegisterContent />
+      </Suspense>
+    </AuthRedirect>
   );
 }

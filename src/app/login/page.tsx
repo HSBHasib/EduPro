@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { AuthRedirect } from "@/components/ui/AuthRedirect";
 import { LoginContent } from "./_components/LoginContent";
 
 export const metadata: Metadata = {
@@ -9,8 +10,10 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={null}>
-      <LoginContent />
-    </Suspense>
+    <AuthRedirect>
+      <Suspense fallback={null}>
+        <LoginContent />
+      </Suspense>
+    </AuthRedirect>
   );
 }
