@@ -174,9 +174,10 @@ export function ManageContent() {
               ? `Are you sure you want to delete "${deleteTarget.title}"? This action cannot be undone.`
               : ""
           }
-          confirmLabel={deleting ? "Deleting..." : "Delete"}
+          confirmLabel="Delete"
           cancelLabel="Cancel"
           danger
+          loading={deleting}
           onConfirm={confirmDelete}
           onCancel={() => setDeleteTarget(null)}
         />

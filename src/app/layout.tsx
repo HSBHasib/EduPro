@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Toaster } from "react-hot-toast";
+import { RouteLoadingBar } from "@/components/ui/RouteLoadingBar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,6 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen font-sans antialiased">
+        <Suspense fallback={null}>
+          <RouteLoadingBar />
+        </Suspense>
         <Toaster position="top-right" />
         <Navbar />
         <main className="min-h-[calc(100vh-4rem)]">{children}</main>
