@@ -31,6 +31,9 @@ const authInstance = betterAuth({
       sameSite: "lax",
       path: "/",
     },
+    ipAddress: {
+      ipAddressHeaders: ["x-forwarded-for"],
+    },
   },
   socialProviders: {
     google: {
