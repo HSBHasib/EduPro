@@ -151,7 +151,7 @@ export function Navbar() {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden rounded-lg p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-dark-700"
+          className="md:hidden rounded-lg p-2 text-gray-800 hover:bg-gray-100/80 active:bg-gray-200/80"
         >
           <AnimatePresence mode="wait">
             {isOpen ? (
@@ -201,10 +201,10 @@ export function Navbar() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed right-0 top-0 z-50 h-full w-72 border-l border-gray-200 bg-white shadow-2xl dark:border-dark-700 dark:bg-dark-900 md:hidden"
+            className="fixed right-0 top-0 z-50 h-full w-72 border-l border-gray-200 bg-white shadow-2xl md:hidden"
           >
             {/* Sidebar header */}
-            <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-dark-700">
+            <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
               <div className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-300 to-warm-300">
                   <BookOpen className="h-4 w-4 text-white" />
@@ -217,14 +217,14 @@ export function Navbar() {
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-dark-700 dark:hover:text-gray-300"
+                className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
               >
                 <X className="h-5 w-5" />
               </motion.button>
             </div>
             {/* User info */}
             {session && (
-              <div className="border-b border-gray-200 px-5 py-4 dark:border-dark-700">
+              <div className="border-b border-gray-200 px-5 py-4">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-300 to-warm-300 text-sm font-bold text-white">
                     {(session.user?.name || session.user?.email || "U")
@@ -259,7 +259,7 @@ export function Navbar() {
                         "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors",
                         pathname === link.href
                           ? "bg-brand-300/10 text-brand-500"
-                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-dark-700 dark:hover:text-white",
+                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
                       )}
                     >
                       {link.label}
@@ -273,12 +273,12 @@ export function Navbar() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="border-t border-gray-200 px-5 py-4 dark:border-dark-700"
+              className="border-t border-gray-200 px-5 py-4"
             >
               {session ? (
                 <button
                   onClick={handleSignOut}
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-500 transition-colors hover:bg-red-50 dark:hover:bg-red-900/20"
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-500 transition-colors hover:bg-red-50"
                 >
                   <LogOut className="h-5 w-5" />
                   Sign Out
@@ -296,7 +296,6 @@ export function Navbar() {
                 </div>
               )}
             </motion.div>
-            e{" "}
           </motion.div>
         )}
       </AnimatePresence>
