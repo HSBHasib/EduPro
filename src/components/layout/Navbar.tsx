@@ -151,7 +151,7 @@ export function Navbar() {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden rounded-lg p-2 text-gray-800 hover:bg-gray-100/80 active:bg-gray-200/80"
+          className="md:hidden rounded-lg p-2 text-gray-700 bg-gray-100/70 hover:bg-gray-200/70 active:bg-gray-300/70"
         >
           <AnimatePresence mode="wait">
             {isOpen ? (
@@ -201,7 +201,7 @@ export function Navbar() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed right-0 top-0 z-50 h-full w-72 border-l border-gray-200 bg-white shadow-2xl md:hidden"
+            className="fixed right-0 top-0 z-50 h-full w-72 bg-white shadow-2xl md:hidden"
           >
             {/* Sidebar header */}
             <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
@@ -256,10 +256,10 @@ export function Navbar() {
                       href={link.href}
                       onClick={() => setIsOpen(false)}
                       className={cn(
-                        "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors",
+                        "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-colors",
                         pathname === link.href
-                          ? "bg-brand-300/10 text-brand-500"
-                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
+                          ? "bg-brand-300/15 text-brand-600"
+                          : "text-gray-700 hover:bg-gray-100 hover:text-gray-900",
                       )}
                     >
                       {link.label}
@@ -273,12 +273,12 @@ export function Navbar() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="border-t border-gray-200 px-5 py-4"
+              className="border-t border-gray-200 px-5 py-3"
             >
               {session ? (
                 <button
                   onClick={handleSignOut}
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-500 transition-colors hover:bg-red-50"
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-red-500 transition-colors hover:bg-red-50"
                 >
                   <LogOut className="h-5 w-5" />
                   Sign Out
